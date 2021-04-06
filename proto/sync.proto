@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sync;
+
+service SyncService {
+	rpc SyncMarkets (stream SyncMarketsRequest) returns (Empty) {}
+	rpc PushTrade (TradeRequest) returns (Empty) {}
+}
+
+message Empty {}
+
+message SyncMarketsRequest {
+	string symbol 			     = 1;
+	string status				 = 2;
+	string base_asset			 = 3;
+	int32  base_asset_precision  = 4;
+	string quote_asset			 = 5;
+	int32  quote_asset_precision = 6;
+	string exchange 	   		 = 7;
+}
+
+message TradeRequest {
+	string  symbol 	   = 1;
+	string  price 	   = 2;
+	string  quantity   = 3;
+	int64   trade_time = 4;
+	string  exchange   = 5;
+}
