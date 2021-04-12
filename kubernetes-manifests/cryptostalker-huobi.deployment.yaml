@@ -20,10 +20,6 @@ spec:
       containers:
       - name: huobi
         image: cryptostalker-huobi
-        ports:
-        - name: debug
-          containerPort: 3000
-        args: ["-grpc", "cryptostalker-aggregator:50051"]
         env:
-        - name: GOMAXPROCS
-          value: "1"
+        - name: GRPC_SERVER_ADDR
+          value: "cryptostalker-aggregator:50051"

@@ -124,24 +124,9 @@ namespace huobi
 
         static async Task Main()
         {
-            Console.WriteLine("Connecting to grpc");
-            Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
-            // var channel = GrpcChannel.ForAddress("http://127.0.0.1:50051");
+            var grpcAddress = Environment.GetEnvironmentVariable("GRPC_SERVER_ADDR") ?? "127.0.0.1:50051";
+            Channel channel = new Channel(grpcAddress, ChannelCredentials.Insecure);
             var client = new SyncService.SyncServiceClient(channel);
-
-            var req = new TradeRequest
-            {
-                Exchange = "huobi",
-                Price = "item.Price.ToString()",
-                Quantity = "item.Amount.ToString()",
-                Symbol = "asdasda",
-                TradeTime = 432423434
-            };
-
-
-            var response = await client.PushTradeAsync(req);
-            Console.WriteLine("Saved trade");
-
 
             Console.WriteLine("Fetching market data");
             var markets = await FetchSymbols();
@@ -252,7 +237,7 @@ namespace huobi
             }
             else if (message.Channel != null)
             {
-                // Console.WriteLine("Probably received a trade.");
+                var symbol = message.Channel.Split(".")[1];
                 foreach (var item in message.Tick.Trades)
                 {
                     var req = new TradeRequest
@@ -260,7 +245,7 @@ namespace huobi
                         Exchange = "huobi",
                         Price = item.Price.ToString(),
                         Quantity = item.Amount.ToString(),
-                        Symbol = "asdasda",
+                        Symbol = symbol,
                         TradeTime = item.TradeTime
                     };
 
@@ -271,7 +256,7 @@ namespace huobi
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("Cannot send trade", ex.Message);
                     }
                 }
             }

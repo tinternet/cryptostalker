@@ -14,9 +14,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database = db::Database::connect().await?;
 
     tokio::select! {
-        _ = grpc::start(database) => {},
-        _ = metrics::start() => {},
-        _ = interrupt::start() => {},
+        v = grpc::start(database) => v?,
+        v = metrics::start() => v?,
+        v = interrupt::start() => v?,
     }
 
     Ok(())

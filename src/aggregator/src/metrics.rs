@@ -6,7 +6,9 @@ use hyper::{
 use prometheus::{Encoder, TextEncoder};
 
 pub async fn start() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = std::env::var("METRICS_LISTENER_ADDR")?.parse()?;
+    let addr = std::env::var("METRICS_LISTENER_ADDR")
+        .map_err(|_| "METRICS_LISTENER_ADDR not defined")?
+        .parse()?;
     tracing::info!("Metrics server listening on http://{}", addr);
 
     let serve_future = Server::bind(&addr).serve(make_service_fn(|_| async {

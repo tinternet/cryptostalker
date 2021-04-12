@@ -3,8 +3,10 @@ WORKDIR /src
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY . .
+COPY *.csproj .
 RUN dotnet restore huobi.csproj
+
+COPY . .
 RUN dotnet build "./huobi.csproj" -c Debug -o /out
 
 FROM build AS publish
