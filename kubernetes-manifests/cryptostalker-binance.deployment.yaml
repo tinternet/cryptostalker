@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptostalker-binance
+  labels:
+    app: cryptostalker
+    tier: binance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptostalker
+      tier: binance
+  template:
+    metadata:
+      labels:
+        app: cryptostalker
+        tier: binance
+    spec:
+      containers:
+      - name: binance
+        image: cryptostalker-binance
+        ports:
+        - name: debug
+          containerPort: 3000
+        args: ["-grpc", "cryptostalker-aggregator:50051"]
+        env:
+        - name: GOMAXPROCS
+          value: "1"

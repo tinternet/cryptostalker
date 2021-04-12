@@ -1,0 +1,18 @@
+syntax = "proto3";
+option csharp_namespace = "huobi";
+
+package sync;
+
+service SyncService {
+	rpc PushTrade (TradeRequest) returns (Empty) {}
+}
+
+message Empty {}
+
+message TradeRequest {
+	string  symbol 	   = 1;
+	string  price 	   = 2;
+	string  quantity   = 3;
+	double  trade_time = 4;
+	string  exchange   = 5;
+}

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptostalker-kraken
+  labels:
+    app: cryptostalker
+    tier: kraken
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptostalker
+      tier: kraken
+  template:
+    metadata:
+      labels:
+        app: cryptostalker
+        tier: kraken
+    spec:
+      containers:
+      - name: kraken
+        image: cryptostalker-kraken
+        ports:
+        - name: debug
+          containerPort: 3000
+        args: ["-grpc", "cryptostalker-aggregator:50051"]
+        env:
+        - name: GOMAXPROCS
+          value: "1"
