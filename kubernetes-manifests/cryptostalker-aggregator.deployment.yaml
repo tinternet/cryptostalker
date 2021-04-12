@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptostalker-aggregator
+  labels:
+    app: cryptostalker
+    tier: aggregator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptostalker
+      tier: aggregator
+  template:
+    metadata:
+      labels:
+        app: cryptostalker
+        tier: aggregator
+    spec:
+      containers:
+      - name: aggregator
+        image: cryptostalker-aggregator
+        ports:
+        - name: http-server
+          containerPort: 50051
+        env:
+        - name: GRPC_LISTENER_ADDR
+          value: "0.0.0.0:50051"
+        - name: DATABASE_URL
+          value: "postgresql://postgres:mysecretpassword@192.168.254.107"
+        - name: RUST_LOG
+          value: "aggregator=trace"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cryptostalker-aggregator
+  labels:
+    app: cryptostalker
+    tier: aggregator
+spec:
+  selector:
+    app: cryptostalker
+    tier: aggregator
+  ports:
+  - port: 50051
+    targetPort: http-server

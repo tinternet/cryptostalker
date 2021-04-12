@@ -1,0 +1,26 @@
+# To learn more about the skaffold.yaml schema visit
+# https://skaffold.dev/docs/references/yaml/
+apiVersion: skaffold/v2beta4
+kind: Config
+build:
+  artifacts:
+  - image: cryptostalker-aggregator
+    context: src/aggregator
+  - image: cryptostalker-kraken
+    context: src/kraken
+  - image: cryptostalker-binance
+    context: src/binance
+  - image: cryptostalker-huobi
+    context: src/huobi
+  tagPolicy:
+    sha256: {}
+deploy:
+  kubectl:
+    manifests:
+    - ./kubernetes-manifests/*.service.yaml
+    - ./kubernetes-manifests/*.deployment.yaml
+profiles:
+- name: cloudbuild
+  build:
+    googleCloudBuild: {}
+

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptostalker-huobi
+  labels:
+    app: cryptostalker
+    tier: huobi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptostalker
+      tier: huobi
+  template:
+    metadata:
+      labels:
+        app: cryptostalker
+        tier: huobi
+    spec:
+      containers:
+      - name: huobi
+        image: cryptostalker-huobi
+        ports:
+        - name: debug
+          containerPort: 3000
+        args: ["-grpc", "cryptostalker-aggregator:50051"]
+        env:
+        - name: GOMAXPROCS
+          value: "1"
